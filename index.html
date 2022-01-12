@@ -4,14 +4,53 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Exploring APIs</title>
     <link rel="stylesheet" href="./assets/css/style.css">
 </head>
 <body>
     
+    <h1>Exploring APIs</h1>
+    <h2>Exploring the AIHW API</h2>
 
-    <textarea id="text">No response :(</textarea>
+    <p>We will first have a look at the datasets that are available. The address is <a href="https://myhospitalsapi.aihw.gov.au/api/v1/datasets">https://myhospitalsapi.aihw.gov.au/api/v1/datasets</a>.</p>
+    
+    <p>This is what the data looks like in the console (I have collapsed some fields for relevance's sake).</p>
+    <p><img src="./assets/screenshots/screenshot1.png" alt="Initial exploration of datasets through the console"></p>
 
+    <p>Of particular interest are the <code>reported_measure_name</code>s. I have pooled unique values in the textarea here so we can have a look at what's on offer.</p>
+    <textarea id="textarea1">No response yet :(</textarea>
+
+    <p>Let's say we are looking at metrics relating to childbirth.</p>
+    <p>Of these reported measures, <code>Childbirth</code>, <code>Caesarean delivery</code> and <code>Vaginal delivery</code> appear of the greatest relevance.</p>
+
+    <p>Let's find out the name of the corresponding datasets so we can start exploring their structure.</p>
+
+    <textarea id="textarea2">No response yet :(</textarea>
+
+    <p>Here are the <code>data_set_id</code>s associated with these dataset (it seems that each dataset can have multiple IDs).</p>
+
+    <textarea id="textarea3">No response yet :(</textarea>
+
+    <p>Hmmm, these datasets seem to be summary datasets. I assume <code>LOS</code> is length of stay, <code>APC</code> is admitted patient care (???) and <code>ADM</code> is admissions.</p>
+
+    <p>We will look at <code>LOS 2011-12</code> as an example. Presumeably, this contains data that pertains to areas outside of childbirth alone, and we will have to extract the relevant information. This data can be found at <a href="https://myhospitalsapi.aihw.gov.au/api/v1/datasets/592/data-items">https://myhospitalsapi.aihw.gov.au/api/v1/datasets/592/data-items</a>. This is what the data looks like in the console (I have collapsed some fields for relevance's sake).</p>
+
+    <p><img src="./assets/screenshots/screenshot2.png" alt="Initial exploration of the LOS 2011-12 dataset through the console"></p>
+    
+    <p>So it seems that each dataset is associated with one measure. In this particular case, this dataset has a <code>measure_code</code> of <code>MYH0014</code>, which corresponds to <code>Average length of overnight stays</code> if we look at the measures API at <a href="https://myhospitalsapi.aihw.gov.au/api/v1/measures">https://myhospitalsapi.aihw.gov.au/api/v1/measures</a>.</p>
+
+    <p>A good place to continue our analysis is to see what sort of measures are available for the datasets relating to childbirth. To do this, we take the above list of <code>data_set_ids</code> and find the associated <code>measure_code</code> and hence the <code>measure_name</code>. Note, there is also reported measures, but we can explore that later as these are a subanalysis of the measures.</p>
+
+    <textarea id="textarea4">No response yet :(</textarea>
+
+    <p>Probably not as exciting metrics as we might be hoping to find. We'll entertain it for now.</p>
+        
+    <p>Moreover, we note that we have access to information about the actual hospital. If we have a look at the actual APIs for the reporting units (hospitals), we can also see some information about the longitude and latitude. However, we will just keep this in the back of our mind for now (may or may not come back to use this data).</p>
+
+    <p>Let's just explore a bit more to see the different hospitals that are included in the data that pertains to childbirth.</p>
+
+    <textarea id="textarea5">No response yet :(</textarea>
+    
     <script src="./assets/js/script.js"></script>
 </body>
 </html>

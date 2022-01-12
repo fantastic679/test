@@ -19,9 +19,8 @@
 
 // When user clicks on a pin, highlight information about that hospitals rating
 
-
 var url = "https://myhospitalsapi.aihw.gov.au/api/v1/datasets"
-var text = document.getElementById("text");
+var textarea1 = document.getElementById("textarea1");
 
 // fetch(url).then(function(response) {
 //     // response.text().then(function(text) {
@@ -71,27 +70,79 @@ fetch(url)
     for (let i = 0; i < values2.length; i++){
         values3[i] = values2[i].reported_measure_summary.reported_measure_name;
     }
-    values4 = [...new Set(values3)];
+    var values4 = [...new Set(values3)];
+
+    var str = JSON.stringify(values4, null, 4);
+    textarea1.textContent = str;
+
+    var values5 = [];
+    var values6 = [];
+    for (let i = 0; i < values3.length; i++) {
+        if (values3[i] == "Childbirth" ||
+            values3[i] == "Caesarean delivery" ||
+            values3[i] == "Vaginal delivery") {
+                values5.push(values2[i].data_set_name);
+                values6.push(values2[i].data_set_id);
+            }
+    }
+    var values7 = [...new Set(values5)];
+    var values8 = [...new Set(values6)];
+    str = JSON.stringify(values7, null, 4)
+    textarea2.textContent = str;
+    str = JSON.stringify(values8, null, 4)
+    textarea3.textContent = str;
+
+    var values9 = [];
+    var values10 = [];
+    for (let i = 0; i < values6.length; i++) {
+        for (let j = 0; j < values2.length; j++) {
+            if (values2[j].data_set_id == values6[i]) {
+                values9.push(values2[j].reported_measure_summary.measure_summary.measure_name)
+
+            }
+        }
+    }
+    var values10 = [...new Set(values9)];
+    var str = JSON.stringify(values10, null, 4);
+    textarea4.textContent = str;
 
 
-
-    function uniqueArray(arr) {
-        var a = [];
-        for (var i=0, l=arr.length; i<l; i++)
-            if (a.indexOf(arr[i]) === -1 && arr[i] !== '')
-                a.push(arr[i]);
-        return a;
+// loop through values8
+// access the measures API to obtain location
+// store in array?
+    var getLocation = function(data_set_id) {
+        var data_items_url = "https://myhospitalsapi.aihw.gov.au/api/v1/datasets/" + data_set_id + "/data-items";
+        var storeData = null;
+        var hospital_locations = [];
+        fetch(data_items_url)
+            .then(json)
+            .then(function(data) {
+                console.log(data_set_id + "success");
+                storeData = data;
+                ////////////////
+                var data_values = Object.keys(storeData).map(key => storeData[key]);
+                var data_values2 = data_values[0];
+                for (i = 0; i < data_values2.length; i++){
+                    hospital_locations.push(data_values2[i].reporting_unit_summary.reporting_unit_name);
+                }            
+            }).catch(function(error) {
+                console.log(data_set_id + "failure", error);
+        });
+        return hospital_locations;
     }
 
+    var values11 = [];
+    for (let i = 0; i < values8.length; i++) {
+        values11.push(getLocation(values8[i]));
+    }
+    var values12 = [...new Set(values11)];
+    var str = JSON.stringify(values12, null, 4);
+    textarea5.textContent = str;
 
 
-    str = JSON.stringify(values4, null, 4); // (Optional) beautiful indented output.
-    console.log(str); // Logs output to dev tools console.
-    // alert(str); // Displays output using window.alert()
 
-    text.textContent = str;
+    
+
   }).catch(function(error) {
     console.log('Request failed', error);
 });
-
-
