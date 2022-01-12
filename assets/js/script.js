@@ -63,34 +63,35 @@ fetch(url)
   .then(function(data) {
     console.log('Request succeeded with JSON response');
     storeData = data;
+    /////////////
+    var values = Object.keys(storeData).map(key => storeData[key]);
+    var values2 = values[0];
+    var values3 = [];
+
+    for (let i = 0; i < values2.length; i++){
+        values3[i] = values2[i].reported_measure_summary.reported_measure_name;
+    }
+    values4 = [...new Set(values3)];
+
+
+
+    function uniqueArray(arr) {
+        var a = [];
+        for (var i=0, l=arr.length; i<l; i++)
+            if (a.indexOf(arr[i]) === -1 && arr[i] !== '')
+                a.push(arr[i]);
+        return a;
+    }
+
+
+
+    str = JSON.stringify(values4, null, 4); // (Optional) beautiful indented output.
+    console.log(str); // Logs output to dev tools console.
+    // alert(str); // Displays output using window.alert()
+
+    text.textContent = str;
   }).catch(function(error) {
     console.log('Request failed', error);
 });
 
 
-var values = Object.keys(storeData).map(key => storeData[key]);
-var values2 = values[0];
-var values3 = [];
-
-for (let i = 0; i < values2.length; i++){
-    values3[i] = values2[i].reported_measure_summary.reported_measure_name;
-}
-values4 = [...new Set(values3)];
-
-
-
-function uniqueArray(arr) {
-    var a = [];
-    for (var i=0, l=arr.length; i<l; i++)
-        if (a.indexOf(arr[i]) === -1 && arr[i] !== '')
-            a.push(arr[i]);
-    return a;
-}
-
-
-
-str = JSON.stringify(values4, null, 4); // (Optional) beautiful indented output.
-console.log(str); // Logs output to dev tools console.
-// alert(str); // Displays output using window.alert()
-
-text.textContent = str;
